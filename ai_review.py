@@ -31,13 +31,12 @@ def review_code(file_path: str) -> None:
     repo = os.environ.get("GITHUB_REPOSITORY")
     sha = os.environ.get("GITHUB_SHA")
     token = os.environ.get("GITHUB_TOKEN")
-    print(repo, sha, token)
     if repo and sha and token:
         post_commit_comment(repo, sha, token, review_text)
 
 
 def post_commit_comment(repo: str, sha: str, token: str, comment_body: str) -> None:
-    url = f"https://github.com/{repo}/commits/{sha}/comments"
+    url = f"https://api.github.com/repos/{repo}/commits/{sha}/comments"
     payload = {"body": f"### 🤖 Gemini AI 程式碼審查報告\n\n{comment_body}"}
     data = json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(
