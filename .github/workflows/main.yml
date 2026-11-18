@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 # 2. 權限設定：因為我們改成「只檢查、不自動修改 Push」，所以只需要讀取權限即可（最安全）
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   python-lint:
@@ -41,10 +41,14 @@ jobs:
           # 3. 檢查 import 排序（加上 --check-only 代表「只檢查不自動修改」，不符規定就報錯）
           isort --check-only .
 
-      # 步驟五： 執行 Gemini AI 程式碼審查
-      - name: 執行 Gemini AI 程式碼審查
+      # 步驟五： 執行 Gemini AI 審查並留言在 Commit
+      - name: 執行 Gemini AI 審查並留言在 Commit
         env:
           # 從 GitHub Secrets 讀取金鑰注入環境變數
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # 底下這兩個是 GitHub 自動提供的內建變數，不用去 Secrets 設定
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
         run: |
           python ai_review.py
