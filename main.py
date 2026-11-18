@@ -1,10 +1,13 @@
 import math
 import os
+from typing import Any
 
 
-def func1(a, b) -> int:
-    return math.floor(a + b)
+def sum_and_floor(x: float, y: float) -> int:
+    """將兩數相加並無條件捨去為整數。"""
+    return math.floor(x + y)
 
 
-def func2(a, b, c) -> str:
+def get_working_directory(*_args: Any) -> str:
+    """取得目前的工作目錄（若因介面需求須保留不定參數）。"""
     return os.getcwd()
