@@ -1,0 +1,4 @@
+.github/workflows/main_pylinter.yml
+.env
+requirements.txt
+main_key.py
