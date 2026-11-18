@@ -36,7 +36,7 @@ def review_code(file_path: str) -> None:
     #     post_commit_comment(repo, sha, token, review_text)
 
     # 設定模型優先順序：主力模型塞車（503）時，自動切換到下一個備援模型
-    models_to_try = ["gemini-3.8-flash", "gemini-3.8-flash-lite", "gemini-3.0-flash"]
+    models_to_try = ["gemini-4-hydrogen", "gemini-3.8-flash", "gemini-3.5-flash-lite"]
     review_text = ""
     for model_name in models_to_try:
         try:
@@ -58,7 +58,10 @@ def review_code(file_path: str) -> None:
             # 若帳號不支援某個備援模型（404），自動跳過試下一個
             print(f"模型 {model_name} 無法使用（{e.code}），嘗試下一個備援模型...")
     if not review_text:
-        print("所有備援模型目前皆滿載或無法使用，略過本次 AI 審查。")
+        review_text = "所有備援模型目前皆滿載或無法使用，略過本次 AI 審查。"
+        print(review_text)
+        if repo and sha and token:
+            post_commit_comment(repo, sha, token, review_text)
         return
 
 
