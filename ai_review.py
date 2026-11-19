@@ -124,7 +124,8 @@ def get_changed_py_files_and_diff() -> tuple[list[str], str]:
     """比對最近兩筆 Commit，取得有變動的 .py 檔案清單與 Git Diff 內容。"""
     try:
         # 1. 取得這次變動的 .py 檔案清單（排除 ai_review.py 本身）
-        files_output = subprocess.check_output(["git", "diff", "--name-only", "HEAD~1", "HEAD", "--", "*.py"], text=True).strip()
+        files_output = subprocess.check_output(
+            ["git", "diff", "--name-only", "HEAD~1", "HEAD", "--", "*.py"], text=True).strip()
     except subprocess.CalledProcessError:
         # 若為倉庫的第一筆 Commit（沒有 HEAD~1），則略過 Diff 比對
         return [], ""
