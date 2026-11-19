@@ -3,8 +3,13 @@ import os
 from typing import Any
 
 
+def sum_and_trunc(x: float, y: float) -> int:
+    """將兩數相加並無條件捨去為整數（向零取整）。"""
+    return math.trunc(x + y)
+
+
 def sum_and_floor(x: float, y: float) -> int:
-    """將兩數相加並無條件捨去為整數。"""
+    """將兩數相加並無條件捨去為整數（向下取整）。"""
     return math.floor(x + y)
 
 
