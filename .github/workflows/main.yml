@@ -15,27 +15,24 @@ jobs:
       # 步驟一：把你的專案程式碼下載到這台虛擬機裡面
       - name: 取得專案程式碼 (Checkout)
         uses: actions/checkout@v6
+        with:
+          # 抓取最近 2 筆 Commit，這樣才能用 git diff 比對這次改了什麼
+          fetch-depth: 2
 
-      # 步驟二：設定 Git 測試帳號署名
-      - name: 設定 Git 測試帳號署名
-        run: |
-          git config --local user.email "frank60605@gmail.com"
-          git config --local user.name "FuchenTsai-star"
-
-      # 步驟三：在虛擬機裡面安裝 Python 環境
+      # 步驟二：在虛擬機裡面安裝 Python 環境
       - name: 安裝 Python 環境
         uses: actions/setup-python@v6
         with:
           python-version: '3.11' # 可依你專案需求調整版本，例如 '3.10' 或 '3.12'
 
-      # 步驟四：安裝檢查工具（如果專案有 requirements.txt 也可以在這裡一起安裝）
+      # 步驟三：安裝檢查工具（如果專案有 requirements.txt 也可以在這裡一起安裝）
       - name: 安裝 Linter 檢查工具
         run: |
           python -m pip install --upgrade pip
           pip install flake8 mypy isort
           pip install google-genai python-dotenv
 
-      # 步驟五：開始執行三項程式碼檢查（任何一項沒過就會亮紅燈擋下）
+      # 步驟四：開始執行三項程式碼檢查（任何一項沒過就會亮紅燈擋下）
       - name: 執行程式碼檢查 (Linting)
         run: |
           # 1. 檢查程式碼風格與排版（設定單行最長不超過 127 個字元）
@@ -47,7 +44,7 @@ jobs:
           # 3. 檢查 import 排序（加上 --check-only 代表「只檢查不自動修改」，不符規定就報錯）
           isort --check-only .
 
-      # 步驟六： 執行 Gemini AI 審查並留言在 Commit
+      # 步驟五： 執行 Gemini AI 審查並留言在 Commit
       - name: 執行 Gemini AI 審查並留言在 Commit
         env:
           # 從 GitHub Secrets 讀取金鑰注入環境變數
